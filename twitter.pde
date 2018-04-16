@@ -26,7 +26,7 @@ void setup() {
   cb.setOAuthAccessTokenSecret("");
 
   twitterInstance = new TwitterFactory(cb.build()).getInstance();
-  queryForTwitter = new Query("#tgif");
+  queryForTwitter = new Query("#");
 
   //String statusMessage = "watch ou this inte";
   //File file = new File("/image/Done.jpg");
