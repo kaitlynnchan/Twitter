@@ -16,7 +16,7 @@ Query queryForTwitter;
 
 float x = 35, y = 35;
 
-color blue = #9AE4E8;//9AE4E8
+color blue = #9AE4E8;
 
 void setup() {
   cb = new ConfigurationBuilder();
@@ -26,7 +26,7 @@ void setup() {
   cb.setOAuthAccessTokenSecret("");
 
   twitterInstance = new TwitterFactory(cb.build()).getInstance();
-  queryForTwitter = new Query("#tgif");
+  queryForTwitter = new Query("#");
 
   //String statusMessage = "watch ou this inte";
   //File file = new File("/image/Done.jpg");
