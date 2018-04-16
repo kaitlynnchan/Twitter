@@ -16,7 +16,7 @@ Query queryForTwitter;
 
 float x = 35, y = 35;
 
-color blue = #9AE4E8;//9AE4E8
+color blue = #9AE4E8;
 
 void setup() {
   cb = new ConfigurationBuilder();
