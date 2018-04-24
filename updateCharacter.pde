@@ -8,7 +8,6 @@ void updateCharacter(){
   if (downkey == false) {
     currentAction = idle;
     character.setRotation(0);
-    dx = 0;
   }
   if (leftkey == false) {
     currentAction = idle;
@@ -31,7 +30,7 @@ void updateCharacter(){
   if (downkey == true) {
     currentAction = idle;
     character.setRotation(89);
-    dx += 100;
+    character.setVelocity(character.getVelocityX(), 100);
   }
   if (upkey == true && leftkey == true) currentAction = birdleft;
   if (downkey == true && leftkey == true){
