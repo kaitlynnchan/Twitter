@@ -12,6 +12,7 @@ void loadWorld() {
   ground.setPosition(width/2, height - 50);
   ground.setFillColor(darkblue);
   ground.setStrokeColor(darkblue);
+  ground.setGrabbable(false);
   ground.setStatic(true);
   world.add(ground);
 }
