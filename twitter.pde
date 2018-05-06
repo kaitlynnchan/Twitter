@@ -26,6 +26,8 @@ float x = 35, y = 35;
 float dx;
 
 FBox character;
+ArrayList<FTweet> tweets;
+ArrayList<FTweetBox> tweetbox;
 
 PImage[] birdleft;
 PImage[] birdright;
@@ -33,11 +35,13 @@ PImage[] idle;
 PImage[] currentAction;
 int costumeNum = 0;
 
-boolean upkey, leftkey, rightkey, downkey;
+boolean upkey, leftkey, rightkey, downkey, controlkey;
 
 color blue = #9AE4E8;
 color darkblue = #066591;
 color white = #FFFFFF;
+color aqua = #1BB5AD;
+color brown = #BC8554;
 
 void setup() {
   cb = new ConfigurationBuilder();
@@ -92,16 +96,9 @@ void fetchAndDrawTweets() {
       String profilepicURL = t.getUser().getBiggerProfileImageURL();
       float w = t.getUser().getFollowersCount();
       PImage p = loadImage(profilepicURL);
-
       String msg = t.getText();
-      println(user + ": " + msg);
-      println("--------------------------------------------------------------------------------------------------------------------------------");
       
-      FBox f = new FBox(p.width, p.height);
-      f.setAngularVelocity(random(0, 10));
-      f.setPosition(random(200, 400), -50);
-      f.attachImage(p);
-      world.add(f);
+      tweetbox.add(new FTweetBox(msg, user, p));
     }
   } 
   catch (TwitterException te) {
@@ -118,7 +115,14 @@ void draw() {
   textSize(30);
   text("#", 50, 50);
   text(text, 70, 50);
-
+  
+  int n2 = tweetbox.size();
+  int i2 = 0;
+  while (i2 < n2) {
+    FTweetBox c = tweetbox.get(i2);
+    c.act();
+    i2++;
+  }
   updateCharacter();
   
 }
@@ -128,6 +132,7 @@ void keyPressed() {
   if (keyCode == LEFT) leftkey = true;
   if (keyCode == DOWN) downkey = true;
   if (keyCode == RIGHT) rightkey = true;
+  if (keyCode == CONTROL) controlkey = true;
 }
 
 void keyReleased() {
@@ -136,13 +141,14 @@ void keyReleased() {
     if (keyCode == LEFT) leftkey = false;
     if (keyCode == DOWN) downkey = false;
     if (keyCode == RIGHT) rightkey = false;
+    if (keyCode == CONTROL) controlkey = false;
   } else {
     if (key == BACKSPACE) {
       if (text.length() > 0) {
         text = text.substring(0, text.length() - 1);
       }
     } else if (key == RETURN || key == ENTER) {
-      fetchAndDrawTweets();//makeTweetBoxes();
+      fetchAndDrawTweets();
       text = "";
     } else if (key == DELETE) {
       loadWorld();
