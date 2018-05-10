@@ -21,10 +21,15 @@ ConfigurationBuilder cb;
 Twitter twitterInstance;
 Query queryForTwitter;
 String text;
+String[] blinkingtext = {
+  " ", "_", 
+};
+int blinktext = 0;
 
 float x = 35, y = 35;
 float dx;
 
+FBox bright;
 FBox character;
 ArrayList<FTweet> tweets;
 ArrayList<FTweetBox> tweetbox;
@@ -34,6 +39,7 @@ PImage[] birdright;
 PImage[] idle;
 PImage[] currentAction;
 int costumeNum = 0;
+PImage backarrow, heartpic, heartfilledpic, commentpic, retweetpic;
 
 boolean upkey, leftkey, rightkey, downkey, controlkey;
 
@@ -42,6 +48,10 @@ color darkblue = #066591;
 color white = #FFFFFF;
 color aqua = #1BB5AD;
 color brown = #BC8554;
+color black = #000000;
+
+int countdown = 200;
+boolean startcountdown = false;
 
 void setup() {
   cb = new ConfigurationBuilder();
@@ -77,6 +87,12 @@ void setup() {
 
   currentAction = idle;
 
+  backarrow = loadImage("back arrow.png");
+  heartpic = loadImage("heart-pic.png");
+  heartfilledpic = loadImage("heart-filled-pic1.png");
+  commentpic = loadImage("comment-pic.png");
+  retweetpic = loadImage("retweet-pic.png");
+
   size (600, 500);
   background(blue);
   Fisica.init(this);
@@ -98,7 +114,7 @@ void fetchAndDrawTweets() {
       PImage p = loadImage(profilepicURL);
       String msg = t.getText();
       
-      tweetbox.add(new FTweetBox(msg, user, p));
+      tweetbox.add(new FTweetBox(msg, user, p, w));
     }
   } 
   catch (TwitterException te) {
@@ -114,7 +130,16 @@ void draw() {
   fill(white);
   textSize(30);
   text("#", 50, 50);
-  text(text, 70, 50);
+  text(text + blinkingtext[blinktext], 70, 50);
+  
+  if (frameCount % 30 == 0) {
+    blinktext += 1;
+    if (blinktext > 1) {
+      blinktext = 0;
+    }
+  }
+
+  image(backarrow, width - 70, 25, 50, 30);
   
   int n2 = tweetbox.size();
   int i2 = 0;
@@ -123,6 +148,17 @@ void draw() {
     c.act();
     i2++;
   }
+  
+  if (startcountdown == true) {
+    countdown--;
+    if (countdown < 0) {
+      bright.setRotation(0);
+      bright.setPosition(width - 10, height - 142);
+      countdown = 200;
+      startcountdown = false;
+    }
+  }
+
   updateCharacter();
   
 }
@@ -154,6 +190,20 @@ void keyReleased() {
       loadWorld();
     } else {
       text += key;
+    }
+  }
+}
+
+void mouseReleased() {
+  int n2 = tweetbox.size();
+  int i2 = tweetbox.size() - 5;
+  println(i2, n2);
+  if (mouseX >= width - 70 && mouseX <= width - 20 && mouseY >= 25 && mouseY <= 55 && tweetbox.size() > 0) {
+    while (i2 < n2) {
+      FTweetBox c = tweetbox.get(i2);
+      tweetbox.remove(i2);
+      world.remove(c);
+      n2--;
     }
   }
 }
