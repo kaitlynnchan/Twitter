@@ -1,14 +1,16 @@
 class FTweetBox extends FBox {
   String msg, name;
   PImage p;
+  int followers;
 
-  FTweetBox(String _msg, String _name, PImage _p) {
+  FTweetBox(String _msg, String _name, PImage _p, int _followers) {
     super(_p.width, _p.height);
     p = _p;
     msg = _msg;
     name = _name;
-    this.setAngularVelocity(random(0, 10));
-    this.setPosition(random(200, 400), -50);
+    followers = _followers;
+    this.setAngularVelocity(0);
+    this.setPosition(-50, -50);
     this.setName("tweet");
     this.attachImage(p);
     world.add(this);
@@ -16,10 +18,8 @@ class FTweetBox extends FBox {
 
   void act() {
     if (touching("slope")) {
-      int i3 = 0;
-      while (i3 < 1) {
-        tweets.add(new FTweet(msg, name, p));
-        i3++;
+      if(frameCount % 20 == 0){
+        tweets.add(new FTweet(msg, name, p, followers));
       }
 
       int n = tweets.size();
@@ -34,10 +34,6 @@ class FTweetBox extends FBox {
     if (touching("twitter-bird") && controlkey == true) {
       this.setPosition(character.getX(), character.getY() - 60);
     }
-  }
-
-  void removethis() {
-    world.remove(this);
   }
 
   boolean touching(String thing) {
